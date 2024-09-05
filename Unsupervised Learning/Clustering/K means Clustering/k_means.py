@@ -56,3 +56,27 @@ ax.plot(range(1, max_clusters+1), inertias, marker='o')
 ax.set_xlabel('Number of clusters')
 ax.set_ylabel('Inertia')
 ax.set_title('Elbow Method')
+
+from yellowbrick.cluster import SilhouetteVisualizer
+
+
+import matplotlib.font_manager
+matplotlib.font_manager.findSystemFonts(fontpaths=None, fontext='ttf')
+# if on linux, set matplotlib font to DejaVuSans
+# get rid of warnings in next cell
+import matplotlib
+matplotlib.rcParams['font.family'] = 'DejaVu Sans'
+
+# Run silhouette method to find optimal number of clusters
+from yellowbrick.cluster import silhouette_visualizer 
+
+max_clusters = 6
+for i in range(max_clusters):
+    km = KMeans(n_clusters=i+2, n_init='auto',
+                max_iter=300, random_state=42)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    # setting show=False so we can set xlim to same value for all plots
+    viz = silhouette_visualizer(km, X, colors='yellowbrick', ax=ax, show=False)
+    ax.set_xlim([-0.1, .8])    
+
